@@ -10,7 +10,7 @@ There are three ways to export characters:
 
 - Right-click a character in the Actors tab of the right sidebar and select the Export Statblock item from the popup menu.
 - Select one or more tokens on the canvas (click and drag with the selection rectangle), then click the Export Statblock button at the bottom of the Actors tab in the right sidebar. The character are displayed in alphabetical order by name.
-- Open the character sheet and click the HTML Filter in the title bar.
+- Open the character sheet and click the HTML Filter icon in the title bar.
 
 The following configuration settings are available:
 
@@ -78,9 +78,9 @@ To reference the biography you would use an object reference to the properties o
 <p class='biography'>@{system.details.biography.value}</p>
 ```
 
-The following directives are available:
+The following directives are available for programmatically accessing character sheet data:
 
-## @@if{...}
+##@@if{...}
 
 If the expression inside the {...} evaluates to true (non-zero, or a non-empty string) all the text between the @if and the corresponding @@endif is processed and displayed. For example:
 
@@ -90,19 +90,35 @@ If the expression inside the {...} evaluates to true (non-zero, or a non-empty s
 @@endif
 ```
 
-## @@for{<type>}
+##@@foreach{<type>}
 
 Iterates through the items of the specified type. Names of items are referenced with @{itemname}, and their stats are referenced with @{itemstats}. The extended details are referenced with @{itemdetails}. For example:
 
 ```html
 @@if{count('weapon')>0}
-	<h2>Attacks</h2>
-	@@foreach{weapon}
-		<p class="exdent"><b>@{itemname}</b>. @{itemstats}</p>
-		@@if{showDetails}
-			<p class="desc">@{itemdetails}</p>
-		@@endif
-	@@endforeach
+ <h2>Attacks</h2>
+ @@foreach{weapon}
+  <p class="exdent"><b>@{itemname}</b>. @{itemstats}</p>
+  @@if{showDetails}
+   <p class="desc">@{itemdetails}</p>
+  @@endif
+ @@endforeach
 @@endif
 ```
 The count() function returns the count of items of the specified type. Types in a DnD5e character sheet include weapon, class, subclass, feat, equipment, consumable, loot, tool, spell, etc. Other game system may have other types.
+
+##@@for{...}
+
+Similar to a Javascript or C++ for loop. Inside the {...} are the initializer, control expression and increment, separated by semicolons. The initializer sets the control variable. The control expression is evaluated, and if it is true, the text between the @@for and the @@endfor is processed. After the text is processed the increment is evaluated, updating the control variable. Beware of infinite loops!
+
+```html
+@@for{slot=1; slot < 10; slot = slot + 1}
+	@@define{nslots = *('system.spells.spell' + slot + '.max')}
+	@@if{nslots > 0}
+		...
+	@@endif
+@@endfor
+```
+
+##@define{...}
+
