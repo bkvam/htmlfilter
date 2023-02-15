@@ -64,7 +64,7 @@ For example, you can reference the character's name inside header tags with:
 <h1>@{name}</h1>
 ```
 
-To reference the character's Strength and Strength modifier you would use"
+To reference the character's Strength and Strength modifier you would use:
 
 ```html
 <td align="center">@{str}<br>(@{sign(strMod)})</td>
@@ -80,7 +80,7 @@ To reference the biography you would use an object reference to the properties o
 
 The following directives are available:
 
-##@if{...}
+## @@if{...}
 
 If the expression inside the {...} evaluates to true (non-zero, or a non-empty string) all the text between the @if and the corresponding @@endif is processed and displayed. For example:
 
@@ -90,3 +90,19 @@ If the expression inside the {...} evaluates to true (non-zero, or a non-empty s
 @@endif
 ```
 
+## @@for{<type>}
+
+Iterates through the items of the specified type. Names of items are referenced with @{itemname}, and their stats are referenced with @{itemstats}. The extended details are referenced with @{itemdetails}. For example:
+
+```html
+@@if{count('weapon')>0}
+	<h2>Attacks</h2>
+	@@foreach{weapon}
+		<p class="exdent"><b>@{itemname}</b>. @{itemstats}</p>
+		@@if{showDetails}
+			<p class="desc">@{itemdetails}</p>
+		@@endif
+	@@endforeach
+@@endif
+```
+The count() function returns the count of items of the specified type. Types in a DnD5e character sheet include weapon, class, subclass, feat, equipment, consumable, loot, tool, spell, etc. Other game system may have other types.
