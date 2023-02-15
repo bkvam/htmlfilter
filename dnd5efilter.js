@@ -304,8 +304,6 @@ export class DnD5eObject extends SystemObject {
 		this.gcheck = a.system?.bonuses?.abilities.check;
 
 		this.defs['name'] = a.name;
-		this.defs['showDetails'] = game.settings.get('htmlfilter', 'details');
-		this.defs['showSpellbook'] = game.settings.get('htmlfilter', 'spellbook');
 		this.defs['actorType'] = a.type;
 		this.defs['size'] = CONFIG.DND5E.actorSizes[a.system?.traits?.size];
 		if (a.type == 'character')
@@ -430,9 +428,9 @@ export class DnD5eObject extends SystemObject {
 					}
 				}
 				data = cat(data, '; ', `${CONFIG.DND5E.abilities[abil]} Spell DC ${8+this.prof+_addbonus(mod, this.gspell)}, Spell Attack ${sign(0, mod+this.prof)}`);
-				this.defs[a.system.attributes.spellcasting + 'msak'] = sign(this, mod + this.prof + Number(this.gmsak?.attack));
-				this.defs[a.system.attributes.spellcasting + 'rsak'] = sign(this, mod + this.prof + Number(this.grsak?.attack));
-				this.defs[a.system.attributes.spellcasting + 'spelldc'] = 8 + this.prof+_addbonus(mod, this.gspell);
+				this.defs[abil + 'msak'] = sign(this, mod + this.prof + Number(this.gmsak?.attack));
+				this.defs[abil + 'rsak'] = sign(this, mod + this.prof + Number(this.grsak?.attack));
+				this.defs[abil + 'spelldc'] = 8 + this.prof+_addbonus(mod, this.gspell);
 				if (n++ == 0) {
 					this.defs['rsak'] = sign(this, mod + this.prof + Number(this.grsak?.attack));
 					this.defs['msak'] = sign(this, mod + this.prof + Number(this.gmsak?.attack));
@@ -546,7 +544,7 @@ export class DnD5eObject extends SystemObject {
 			deets = `Melee: ${this.defs['msak']} to hit`;
 		} else if (i.system.actionType == 'rsak') {
 			deets = `Ranged: ${this.defs['rsak']} to hit`;
-		} else if (i.system.actionType == 'save') {
+		} else if (i.system.actionType == 'save' && i.system?.save?.ability) {
 			deets = `Save: ${CONFIG.DND5E.abilities[i.system.save.ability]} DC ${this.defs['spelldc']}`;
 		}
 

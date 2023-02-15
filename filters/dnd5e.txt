@@ -491,6 +491,9 @@ function edit(id) {
 				<td style="width: 2.5in; height: 99%;" colspan="3">
 				@@foreach{weapon}
 					<p class="x"><b>@{itemname}</b> @{itemstats}</p>
+					@@if{showDetails && itemdetails && strlength(itemdetails) <= maxDetails}
+						<p class="desc">@{itemdetails}</p>
+					@@endif
 				@@endforeach
 				@@foreach{spell}
 					@@if{item.system.actionType = 'rsak' || item.system.actionType = 'msak' || item.system.actionType = 'save' && damage}
@@ -499,6 +502,9 @@ function edit(id) {
 				@@endforeach
 				@@foreach{consumable}
 					<p class="x"><b>@{itemname}</b> @{itemstats}</p>
+					@@if{showDetails && itemdetails && strlength(itemdetails) <= maxDetails}
+						<p class="desc">@{itemdetails}</p>
+					@@endif
 				@@endforeach
 				</td>
 			</tr>
@@ -548,6 +554,9 @@ function edit(id) {
 				@@endforeach
 				@@foreach{feat}
 					<p class="x"><b>@{itemname}</b> @{itemstats}</p>
+					@@if{showDetails && itemdetails && strlength(itemdetails) <= maxDetails}
+						<p class="desc">@{itemdetails}</p>
+					@@endif
 				@@endforeach
 				</td>
 			</tr>
@@ -604,10 +613,16 @@ function edit(id) {
 @@endif
 
 @@if{count('spell') > 0 && showSpellbook}
-@@if{spellcasting}
 <div class="lev name fullwidth" style="padding-bottom: 4pt; padding-top: 4pt; break-before: page">Spells for @{name}</div>
-<p class="sc">@{spellcasting}</p>
-@@end
+@@if{intrsak}
+<p class="sc">Intelligence ranged spell attack @{intrsak}, Intelligence melee spell attack @{intmsak}, <b>Intelligence Spell DC</b> @{intspelldc}</p>
+@@endif
+@@if{wisrsak}
+<p class="sc">Wisdom ranged spell attack @{wisrsak}, Wisdom melee spell attack @{wismsak}, <b>Wisdom Spell DC</b> @{wisspelldc}</p>
+@@endif
+@@if{charsak}
+<p class="sc">Charisma ranged spell attack @{charsak}, Charisma melee spell attack @{chamsak}, <b>Charisma Spell DC</b> @{chaspelldc}</p>
+@@endif
 <div class="spells">
 	@@for{level = 0; level < 10; level = level + 1}
 		@@define{showhdr=1}

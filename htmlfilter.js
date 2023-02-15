@@ -921,6 +921,17 @@ Hooks.once('init', async function () {
 		console.log('htmlfilter | details: ' + value)
 	  },
 	});
+	game.settings.register('htmlfilter', 'maxdetails', {
+	  name: 'Maximum Detail Length',
+	  hint: 'If the details of an item exceed this length, the details will not be displayed. This is for items such as race, which are very long and filled with information included in other items.',
+	  scope: 'client',     // "world" = sync to db, "client" = local storage
+	  config: true,       // false if you dont want it to show in module config
+	  type: Number,       // Number, Boolean, String, Object
+	  default: 500,
+	  onChange: value => { // value is the new value of the setting
+		console.log('htmlfilter | maxdetails: ' + value)
+	  },
+	});
 	game.settings.register('htmlfilter', 'spellbook', {
 	  name: 'Full Spell Book',
 	  hint: 'Show the full details of all spells.',

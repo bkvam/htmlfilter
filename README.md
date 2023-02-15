@@ -16,15 +16,19 @@ The following configuration settings are available:
 
 ## Filter file
 
-The name of the filter file. The default is modules/htmlfilter/filters/dnd5e.txt. Currently only two are available, for DnD5e. 
+The name of the filter file. The default is modules/htmlfilter/filters/dnd5e.txt. Currently two are available, for DnD5e: **dnd5e.txt**, formatted like a character sheet; and **dndstatblock.txt**, formatted like a statblock.
 
-These filters are HTML files with .txt extensions. If you add your own filters you should create them in a different folder so that they will not be lost when you update this module. Creating a filter is like writing an HTML file with special references to the data (see below).
+These filters are HTML files with .txt extensions. If you add your own filters you should create them in a different folder under Foundry's data folder so that they will not be lost when you update this module. Creating a filter is like writing an HTML file with special references to the data (see below).
 
 ## Show Long Descriptions
 
 Show the long descriptions for items. If unchecked, only the brief details of the item are shown. The exact details shown vary by type of item (equipment, weapons, class, etc.). Items that are equipped are indicated by a preceding bullet.
 
 Note that the details for some items (classes, races) can be quite lengthy, so you may wish to omit all that boilerpalte.
+
+## Maximum Detail Length
+
+If the details of an item exceed this length, the details will not be displayed. This is for items such as race, which are very long and filled with information included in other items. This length includes any HTML formatting that may be included in the details, so you may need to set this higher than would seem necessary to get certain items' details to display if they are highly formatted.
 
 ## Full Spell Book
 
@@ -57,6 +61,8 @@ Because a newly created tab has no file associated with it, you can't directly s
 A filter file is formatted as standard HTML, with a .txt extension.
   
 Some of the data in the character sheet is available through short names, while more obscure data can be referenced through the data structures of the actual actor objects.
+
+A property is referenced within the HTML filter with @{...}, where the ... is the name of a property or an expression. If the contents of @{...} cannot be evaluated it is emitted directly into the output.
   
 For example, you can reference the character's name inside header tags with:
   
@@ -144,40 +150,80 @@ Defines a value, which can be referenced in @{...} expression or an @@if{...}. N
 ## Predefined Properties
 The following character properties are predefined for DnD5e. The names are case-sensitive.
 
+You can write filters for other game systems, but there are no predefined properties. You'll need to reference the full property name. Refer to the documentation for those systems, or you can export an Actor to .json file and see the structure of the actor object for that game system.
+
+For example, the unofficial GURPS 4e system's ST value and point cost can be referenced with 
+```
+<p>ST @{system.attributes.ST.import} [@{system.attributes.ST.points}]</p>
+```
+
 title: the title, either the character name or the world name if multiple characters are selected.
+
 name
-actorType: values are character, npc, etc.
+
+actorType: values are 'character', 'npc', etc.
+
 size
+
 charLevel
+
 prof: proficiency
+
 cr: NPC challenge rating
+
 classList: list of all classes and their levels
+
 xp, nextLevelXP
+
+Properties Relating to Spellcasting:
+
 rsak, msak, spelldc, intrsak, intmsak, intspelldc, wisrsak, wismsak, wisspelldc, charsak, chamsak, chaspelldc
+
 spellcasting: list of all the applicable values from above (more than one for multiclass spellcasters).
+
 spellAbilities: comma-separated list of spell abilities (e.g., int,wis).
+
 race
+
 Skill Values: these are formatted with the name and the value.
  acr, ani, arc, ath, dec, his, ins, itm, inv, med, nat, prc, prf, per, rel, slt, ste, sur
 
 The raw values are also available by referencing the properties directly with system.skills.acr.value, for example.
+
 alignment
+
 ac: the value of AC
+
 acdetails: other details about AC, including armor type, etc.
+
 hp
+
 playername: name of the character owner if not Gamemaster.
+
 img: path for character image
+
 imgheight: setting for image height
+
 showDetails: value of Show Details setting 
+
 showSpellbook: value of Show Spellbook setting
+
 skills: list of skills
+
 initiative
+
 languages, damageResistances, damageImmunities, damageVulnerabilities, conditionImmunities, weaponProficiencies, armorProficiencies, toolProficiencies
+
 background
+
 str, dex, con, int, wis, cha
+
 strMod, dexMod, conMod, intMod, wisMod, chaMod
+
 strSave, dexSave, conSave, intSave, wisSave, chaSave
+
 senses: a list of all senses
+
 speed: a list of all speeds
 
 Inside a @@foreach the following values can be referenced:
@@ -187,18 +233,23 @@ itemname, itemstats, itemdetails, damage, spellLevel, spellCastTime, spellRange,
 ## Predefined Functions
 
 Standard functions:
+
  min(a, b, c, ...), max(a, b, c, ...), abs(x), round(x), trunc(x), floor(x), ceil(x)
+
 strlength(string): number of characters in string.
+
 count(string): number of items of the specified type ('spell', 'class', 'loot', etc.).
+
 sign(number): places a '+' in front of number if greater than zero.
+
 concat(s1, delim, s2): concatenates the two strings with delim, omitting delim if either of s1 or s2 is empty.
 
 ## Operators
 
-### +, -, *, /
+### +, -, \*, /
 Standard binary arithmetic operators
 
-### >, <, ≥, >=, ≤, <=, ≠, !=
+### \>, \<, ≥, \>=, ≤, \<=, ≠, !=
 Standard comparison operators
 
 ### &&, ||
@@ -207,8 +258,8 @@ Standard logical AND and OR
 ### !, -, +
 Logical not, unary minus and unary plus
 
-### *
+### \*
 Unary indirection operator. The operand is taken to be a string and used as a property of the character. For example, "\*'ac'" returns the same value as "ac".
 
-### <condition> ? <value1> : <value2>
-Ternary conditional operator: if <condition> is true, returns <value1>, otherwise <value2>
+### \<condition\> ? \<value1\> : \<value2\>
+Ternary conditional operator: if \<condition\> is true, returns \<value1\>, otherwise \<value2\>

@@ -271,6 +271,7 @@ export function stripjunk(filter, str) {
 		this.defs['img'] = this.actor.img;
 		this.defs['imgheight'] = game.settings.get('htmlfilter', 'imgheight');
 		this.defs['showDetails'] = game.settings.get('htmlfilter', 'details');
+		this.defs['maxDetails'] = game.settings.get('htmlfilter', 'maxdetails');
 		this.defs['showSpellbook'] = game.settings.get('htmlfilter', 'spellbook');
 
 		let players = '';
