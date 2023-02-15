@@ -52,14 +52,41 @@ Because a newly created tab has no file associated with it, you can't directly s
 - The file can now be opened with a browser or HTML editor.
 - Note that the character image will not be copied this way: it is a reference to a location in the Foundry Data hierarchy and you'll need to copy that separately.
 
-  # Creating a Filter
+# Creating a Filter
   
-  A filter file is formatted as standard HTML, with a .txt extension.
+A filter file is formatted as standard HTML, with a .txt extension.
   
-  Some of the data in the character sheet is available through short names, while more obscure data can be referenced through the data structures of the actual actor objects.
+Some of the data in the character sheet is available through short names, while more obscure data can be referenced through the data structures of the actual actor objects.
   
-  For example, you can reference the character's name inside header tags with:
+For example, you can reference the character's name inside header tags with:
   
-  ```html
-  <h1>@{name}</h1>
-  ```
+```html
+<h1>@{name}</h1>
+```
+
+To reference the character's Strength and Strength modifier you would use"
+
+```html
+<td align="center">@{str}<br>(@{sign(strMod)})</td>
+```
+
+The sign function places a '+' before numbers greater than zero.
+
+To reference the biography you would use an object reference to the properties of the actor object:
+
+```html
+<p class='biography'>@{system.details.biography.value}</p>
+```
+
+The following directives are available:
+
+##@if{...}
+
+If the expression inside the {...} evaluates to true (non-zero, or a non-empty string) all the text between the @if and the corresponding @@endif is processed and displayed. For example:
+
+```html
+@@if{actorType != 'character'}
+<p class="exdent"><b>Challenge</b> @{system.details.cr} (@{system.details.xp.value} XP)</p>
+@@endif
+```
+
